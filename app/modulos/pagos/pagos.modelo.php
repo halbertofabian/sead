@@ -45,17 +45,19 @@ class PagosModelo
     {
         try {
             //code...
-            $sql = "INSERT INTO tbl_paquetes_pagos_ppg (ppg_ficha_pago,ppg_ficha_venta,ppg_monto,ppg_fecha_registro,ppg_concepto,ppg_usuario_registro,ppg_adeudo,ppg_id_sucursal) VALUES (?,?,?,?,?,?,?,?) ";
+            $sql = "INSERT INTO tbl_paquetes_pagos_ppg (ppg_ficha_pago,ppg_ficha_venta,ppg_monto,ppg_descuento,ppg_total,ppg_fecha_registro,ppg_concepto,ppg_usuario_registro,ppg_adeudo,ppg_id_sucursal) VALUES (?,?,?,?,?,?,?,?,?,?) ";
             $con = Conexion::conectar();
             $pps = $con->prepare($sql);
             $pps->bindValue(1, $ppg['ppg_ficha_pago']);
             $pps->bindValue(2, $ppg['ppg_ficha_venta']);
             $pps->bindValue(3, $ppg['ppg_monto']);
-            $pps->bindValue(4, $ppg['ppg_fecha_registro']);
-            $pps->bindValue(5, $ppg['ppg_concepto']);
-            $pps->bindValue(6, $ppg['ppg_usuario_registro']);
-            $pps->bindValue(7, $ppg['ppg_adeudo']);
-            $pps->bindValue(8, $ppg['ppg_id_sucursal']);
+            $pps->bindValue(4, $ppg['ppg_descuento']);
+            $pps->bindValue(5, $ppg['ppg_total']);
+            $pps->bindValue(6, $ppg['ppg_fecha_registro']);
+            $pps->bindValue(7, $ppg['ppg_concepto']);
+            $pps->bindValue(8, $ppg['ppg_usuario_registro']);
+            $pps->bindValue(9, $ppg['ppg_adeudo']);
+            $pps->bindValue(10, $ppg['ppg_id_sucursal']);
             $pps->execute();
             return $pps->rowCount() > 0;
         } catch (PDOException $th) {
@@ -391,11 +393,19 @@ class PagosModelo
             $con = null;
         }
     }
-    public static function mdlConsultarFichas($vfch_id = "")
+    public static function mdlConsultarFichas($vfch_id = "", $vfch_ficha_pago="")
     {
         try {
             //code...
-            if ($vfch_id != "") {
+            if ($vfch_ficha_pago != "" && $vfch_id == "") {
+                $sql = "SELECT * FROM tbl_ficha_venta_vfch WHERE vfch_ficha_pago = ?";
+                $con = Conexion::conectar();
+                $pps = $con->prepare($sql);
+                $pps->bindValue(1, $vfch_ficha_pago);
+                $pps->execute();
+                return $pps->fetchAll();
+            }
+            elseif ($vfch_id != "" && $vfch_ficha_pago== "" ) {
                 $sql = "SELECT * FROM tbl_ficha_venta_vfch WHERE vfch_id = ?";
                 $con = Conexion::conectar();
                 $pps = $con->prepare($sql);

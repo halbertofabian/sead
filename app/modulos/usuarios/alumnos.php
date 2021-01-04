@@ -493,6 +493,8 @@
                                 <th>Nombre</th>
                                 <th>Teléfono</th>
                                 <th>Correo electrónico</th>
+                                <th>Usuario registro</th>
+                                <th>Fecha registro</th>
                                 <!-- <th>Modalidad</th> -->
                                 <!-- <th>Dirección</th> -->
                                 <th>Acciones</th>
@@ -519,9 +521,11 @@
 
                                     </td>
 
-                                    <td><?php echo $usr['usr_nombre'] ?></td>
+                                    <td><?php echo $usr['usr_nombre'].' '.$usr['usr_app'].' '.$usr['usr_apm'] ?></td>
                                     <td><?php echo $usr['usr_telefono'] ?></td>
                                     <td><?php echo $usr['usr_correo'] ?></td>
+                                    <td><?php echo $usr['usr_usuario_registro'] ?></td>
+                                    <td><?php echo $usr['usr_fecha_registro'] ?></td>
                                     <!-- <td><?php echo $usr['usr_modalidad'] ?></td> -->
                                     
                                     <td>

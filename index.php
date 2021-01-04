@@ -1,5 +1,4 @@
-<?php
-@session_start(); 
+<?php @session_start();
 include_once 'config.php';
 require_once 'app/modulos/app/app.controlador.php';
 require_once 'app/modulos/login/login.controlador.php';
@@ -12,6 +11,8 @@ require_once 'app/modulos/paquetes/paquetes.controlador.php';
 require_once 'app/modulos/cupones/cupones.controlador.php';
 require_once 'app/modulos/pagos/pagos.controlador.php';
 require_once 'app/modulos/inscripciones/inscripciones.controlador.php';
+require_once 'app/modulos/gastos/gastos.controlador.php';
+require_once 'app/modulos/ingresos/ingresos.controlador.php';
 
 
 
@@ -29,6 +30,8 @@ require_once 'app/modulos/paquetes/paquetes.modelo.php';
 require_once 'app/modulos/cupones/cupones.modelo.php';
 require_once 'app/modulos/pagos/pagos.modelo.php';
 require_once 'app/modulos/inscripciones/inscripciones.modelo.php';
+require_once 'app/modulos/gastos/gastos.modelo.php';
+require_once 'app/modulos/ingresos/ingresos.modelo.php';
 
 
 

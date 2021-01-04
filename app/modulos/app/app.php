@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
 
@@ -116,7 +115,8 @@
     <body class="horizontal-layout horizontal-menu 2-columns  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
 
         <div class="urlApp" urlApp="<?php echo HTTP_HOST ?>"></div>
-        <!-- BEGIN: Header-->
+
+        <!-- END: Header-->
         <nav class="header-navbar navbar-expand-lg navbar navbar-with-menu navbar-fixed navbar-shadow navbar-brand-center">
             <div class="navbar-header d-xl-block d-none">
                 <ul class="nav navbar-nav flex-row">
@@ -227,11 +227,12 @@
                                 </ul>
                             </li> -->
                             <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
-                                    <div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600">Albert Fabián
-                                        </span><span class="user-status">Administrador</span></div><span><img class="round" src="https://scontent.fgdl3-1.fna.fbcdn.net/v/t1.0-9/66502409_334518250764473_6286267005196566528_n.jpg?_nc_cat=111&ccb=2&_nc_sid=09cbfe&_nc_eui2=AeG5_gTQ9_3tdREtT7NH12htZui7St_ja2xm6LtK3-NrbJAlCBvSIlDVvlldKWoHuoB6uLsEiCEuXmKEZNH3fghu&_nc_ohc=DSBEe5456AoAX-2qBZp&_nc_ht=scontent.fgdl3-1.fna&oh=36072fb994814ae319b83a6d25453bd5&oe=5FE6EE56" alt="avatar" height="40" width="40"></span>
+                                    <div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600"><?php echo $_SESSION['session_usr']['usr_nombre'] ?>
+                                        </span><span class="user-status"><?php echo $_SESSION['session_usr']['usr_rol'] ?></span></div><span><img class="round" src="https://i.pinimg.com/originals/ff/a0/9a/ffa09aec412db3f54deadf1b3781de2a.png" alt="avatar" height="40" width="40"></span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <!-- <a class="dropdown-item" href="page-user-profile.html"><i class="feather icon-user"></i> Edit Profile</a><a class="dropdown-item" href="app-email.html"><i class="feather icon-mail"></i> My -->
+                                    <a class="dropdown-item" href="<?php  echo HTTP_HOST.'mi-perfil' ?>"><i class="feather icon-user"></i> Editar perfil</a>
+                                    <!-- <a class="dropdown-item" href="app-email.html"><i class="feather icon-mail"></i> My -->
                                     <!-- Inbox</a><a class="dropdown-item" href="app-todo.html"><i class="feather icon-check-square"></i> Task</a><a class="dropdown-item" href="app-chat.html"><i class="feather icon-message-square"></i> Chats</a> -->
                                     <!-- <div class="dropdown-divider"></div> -->
                                     <a class="dropdown-item" href="<?php echo HTTP_HOST . 'salir' ?>"><i class="feather icon-power"></i> Salir</a>
@@ -325,91 +326,139 @@
                             results found.</span></div>
                 </a></li>
         </ul>
-        <!-- END: Header-->
-
 
         <!-- BEGIN: Main Menu-->
-        <div class="horizontal-menu-wrapper">
-            <div class="header-navbar navbar-expand-sm navbar navbar-horizontal floating-nav navbar-light navbar-without-dd-arrow navbar-shadow menu-border" role="navigation" data-menu="menu-wrapper">
-                <div class="navbar-header">
-                    <ul class="nav navbar-nav flex-row">
-                        <li class="nav-item mr-auto"><a class="navbar-brand" href="../../../html/ltr/horizontal-menu-template/index.html">
-                                <div class="brand-logo"></div>
-                                <h2 class="brand-text mb-0">S.E.A.D</h2>
-                            </a></li>
-                        <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i class="feather icon-x d-block d-xl-none font-medium-4 primary toggle-icon"></i><i class="toggle-icon feather icon-disc font-medium-4 d-none d-xl-block collapse-toggle-icon primary" data-ticon="icon-disc"></i></a></li>
-                    </ul>
-                </div>
-                <!-- Horizontal menu content-->
-                <div class="navbar-container main-menu-content" data-menu="menu-container">
-                    <!-- include ../../../includes/mixins-->
-                    <ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation">
+        <?php if ($_SESSION['session_usr']['usr_rol'] != "Alumno") : ?>
+            <!-- BEGIN: Header-->
 
-                        <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="<?php echo HTTP_HOST ?>" data-toggle="dropdown"><i class="feather icon-home"></i><span data-i18n="Dashboard">Dasboard</span></a>
-                            <ul class="dropdown-menu">
-                                <li class="active" data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST ?>" data-toggle="dropdown" data-i18n="Inicio"><i class="feather icon-home"></i>Inicio</a>
-                                    <!-- 
+            <div class="horizontal-menu-wrapper">
+                <div class="header-navbar navbar-expand-sm navbar navbar-horizontal floating-nav navbar-light navbar-without-dd-arrow navbar-shadow menu-border" role="navigation" data-menu="menu-wrapper">
+                    <div class="navbar-header">
+                        <ul class="nav navbar-nav flex-row">
+                            <li class="nav-item mr-auto"><a class="navbar-brand" href="../../../html/ltr/horizontal-menu-template/index.html">
+                                    <div class="brand-logo"></div>
+                                    <h2 class="brand-text mb-0">S.E.A.D</h2>
+                                </a></li>
+                            <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i class="feather icon-x d-block d-xl-none font-medium-4 primary toggle-icon"></i><i class="toggle-icon feather icon-disc font-medium-4 d-none d-xl-block collapse-toggle-icon primary" data-ticon="icon-disc"></i></a></li>
+                        </ul>
+                    </div>
+                    <!-- Horizontal menu content-->
+                    <div class="navbar-container main-menu-content" data-menu="menu-container">
+                        <!-- include ../../../includes/mixins-->
+                        <ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation">
+
+                            <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="<?php echo HTTP_HOST ?>" data-toggle="dropdown"><i class="feather icon-home"></i><span data-i18n="Dashboard">Dasboard</span></a>
+                                <ul class="dropdown-menu">
+                                    <li class="active" data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST ?>" data-toggle="dropdown" data-i18n="Inicio"><i class="feather icon-home"></i>Inicio</a>
+                                        <!-- 
                             </li>
                             <li data-menu=""><a class="dropdown-item" href="dashboard-ecommerce.html" data-toggle="dropdown" data-i18n="eCommerce"><i class="feather icon-shopping-cart"></i>eCommerce</a>
                             </li> -->
-                            </ul>
-                        </li>
-                        <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="feather icon-users"></i><span data-i18n="Users">Alumnos</span></a>
-                            <ul class="dropdown-menu">
-                                <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'alumnos/new' ?>" data-toggle="dropdown" data-i18n="Nuevo alumno"><i class="feather icon-plus"></i>Nuevo alumno</a>
-                                </li>
-                                <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'alumnos' ?>" data-toggle="dropdown" data-i18n="Listar alumno"><i class="feather icon-check"></i>Listar alumno</a>
-                                </li>
-                                <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'alumnos/importar' ?>" data-toggle="dropdown" data-i18n="Importar alumnos"><i class="feather icon-file"></i>Importar alumnos</a>
-                                </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="feather icon-users"></i><span data-i18n="Users">Alumnos</span></a>
+                                <ul class="dropdown-menu">
+                                    <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'alumnos/new' ?>" data-toggle="dropdown" data-i18n="Nuevo alumno"><i class="feather icon-plus"></i>Nuevo alumno</a>
+                                    </li>
+                                    <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'alumnos' ?>" data-toggle="dropdown" data-i18n="Listar alumno"><i class="feather icon-check"></i>Listar alumno</a>
+                                    </li>
+                                    <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'alumnos/importar' ?>" data-toggle="dropdown" data-i18n="Importar alumnos"><i class="feather icon-file"></i>Importar alumnos</a>
+                                    </li>
 
-                            </ul>
-                        </li>
-                        <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="feather icon-grid"></i><span data-i18n="Users">Paquetes</span></a>
-                            <ul class="dropdown-menu">
-                                <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'paquetes/new' ?>" data-toggle="dropdown" data-i18n="Crear nuevo"><i class="feather icon-plus"></i>Crear nuevo</a>
-                                </li>
-                                <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'paquetes' ?>" data-toggle="dropdown" data-i18n="Listar paquetes"><i class="feather icon-check"></i>Listar paquetes</a>
+                                </ul>
+                            </li>
+                            <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="feather icon-grid"></i><span data-i18n="Users">Paquetes</span></a>
+                                <ul class="dropdown-menu">
+                                    <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'paquetes/new' ?>" data-toggle="dropdown" data-i18n="Crear nuevo"><i class="feather icon-plus"></i>Crear nuevo</a>
+                                    </li>
+                                    <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'paquetes' ?>" data-toggle="dropdown" data-i18n="Listar paquetes"><i class="feather icon-check"></i>Listar paquetes</a>
 
 
-                            </ul>
-                        </li>
+                                </ul>
+                            </li>
 
-                        <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="feather icon-grid"></i><span data-i18n="Users">Inscribir</span></a>
-                            <ul class="dropdown-menu">
-                                <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'inscripciones/new' ?>" data-toggle="dropdown" data-i18n="Registrar inscripción"><i class="feather icon-plus"></i>Registrar inscripción</a>
-                                </li>
-                                <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'inscripciones' ?>" data-toggle="dropdown" data-i18n="Inscripciones"><i class="feather icon-plus"></i>Listar Inscripciones</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="feather icon-grid"></i><span data-i18n="Users">Pagos</span></a>
-                            <ul class="dropdown-menu">
-                                <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'pagos/new' ?>" data-toggle="dropdown" data-i18n="Nuevo pago"><i class="feather icon-plus"></i>Nuevo pago</a>
-                                </li>
-                                <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'pagos/fichas' ?>" data-toggle="dropdown" data-i18n="Historial de pagos"><i class="feather icon-plus"></i>Historial de fichas</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="feather icon-grid"></i><span data-i18n="Users">Gestión de tienda</span></a>
-                            <ul class="dropdown-menu">
+                            <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="feather icon-grid"></i><span data-i18n="Users">Inscribir</span></a>
+                                <ul class="dropdown-menu">
+                                    <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'inscripciones/new' ?>" data-toggle="dropdown" data-i18n="Registrar inscripción"><i class="feather icon-plus"></i>Registrar inscripción</a>
+                                    </li>
+                                    <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'inscripciones' ?>" data-toggle="dropdown" data-i18n="Inscripciones"><i class="feather icon-plus"></i>Listar Inscripciones</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="feather icon-grid"></i><span data-i18n="Users">Pagos</span></a>
+                                <ul class="dropdown-menu">
+                                    <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'pagos/new' ?>" data-toggle="dropdown" data-i18n="Nuevo pago"><i class="feather icon-plus"></i>Nuevo pago</a>
+                                    </li>
+                                    <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'pagos/fichas' ?>" data-toggle="dropdown" data-i18n="Historial de pagos"><i class="feather icon-plus"></i>Historial de fichas</a>
+                                    </li>
+                                </ul>
+                            </li>
 
-                                <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="feather icon-grid"></i><span data-i18n="Users">Cupones</span></a>
-                                    <ul class="dropdown-menu">
-                                        <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'cupones/new' ?>" data-toggle="dropdown" data-i18n="cupones"><i class="feather icon-plus"></i>Registrar cupón</a>
-                                        </li>
-                                        <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'cupones' ?>" data-toggle="dropdown" data-i18n="cupones"><i class="feather icon-plus"></i>Listar cupones</a>
-                                        </li>
+                            <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="feather icon-grid"></i><span data-i18n="Gestión de tienda">Gestión de tienda</span></a>
+                                <ul class="dropdown-menu">
+                                    <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown" data-i18n="Cupones"><i class="feather icon-grid"></i>Cupones</a>
+                                        <ul class="dropdown-menu">
+                                            <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'cupones/new' ?>" data-toggle="dropdown" data-i18n="Nuevo cupon"><i class="feather icon-circle"></i>Nuevo cupon</a>
+                                            </li>
+                                            <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'cupones' ?>" data-toggle="dropdown" data-i18n="Gestión de cupones"><i class="feather icon-circle"></i>Gestión de cupones</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown" data-i18n="Cupones"><i class="feather icon-grid"></i>Usuarios</a>
+                                        <ul class="dropdown-menu">
+                                            <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'usuarios/new' ?>" data-toggle="dropdown" data-i18n="Nuevo usuario"><i class="feather icon-circle"></i>Nuevo usuario</a>
+                                            </li>
+                                            <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'usuarios' ?>" data-toggle="dropdown" data-i18n="Gestión de usuarios"><i class="feather icon-circle"></i>Gestión de usuarios</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown" data-i18n="Cupones"><i class="feather icon-grid"></i>Gastos</a>
+                                        <ul class="dropdown-menu">
+                                            <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'gastos' ?>" data-toggle="dropdown" data-i18n="Nuevo usuario"><i class="feather icon-circle"></i>Nuevo gasto</a>
+                                            </li>
+                                            <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'listar-gastos' ?>" data-toggle="dropdown" data-i18n="Nuevo usuario"><i class="feather icon-circle"></i>Listar gastos</a>
+                                            </li>
+                                            <li data-menu=""><a class="dropdown-item" href="<?php echo HTTP_HOST . 'categorias' ?>" data-toggle="dropdown" data-i18n="Gestión de usuarios"><i class="feather icon-circle"></i>Gestión de categorías </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="nav-item d-none d-lg-block"><a class="nav-link" href="<?php echo HTTP_HOST . 'ingresos'  ?>" data-toggle="tooltip" data-placement="top"><i class="feather icon-grid"></i>Ingresos</a></li>
 
-                                    </ul>
-                                </li>
 
-                            </ul>
-                        </li>
-                    </ul>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
+        <?php elseif ($_SESSION['session_usr']['usr_rol'] == "Alumno") : ?>
+            <!-- BEGIN: Header-->
+
+            <div class="horizontal-menu-wrapper">
+                <div class="header-navbar navbar-expand-sm navbar navbar-horizontal floating-nav navbar-light navbar-without-dd-arrow navbar-shadow menu-border" role="navigation" data-menu="menu-wrapper">
+                    <div class="navbar-header">
+                        <ul class="nav navbar-nav flex-row">
+                            <li class="nav-item mr-auto"><a class="navbar-brand" href="../../../html/ltr/horizontal-menu-template/index.html">
+                                    <div class="brand-logo"></div>
+                                    <h2 class="brand-text mb-0">S.E.A.D</h2>
+                                </a></li>
+                            <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i class="feather icon-x d-block d-xl-none font-medium-4 primary toggle-icon"></i><i class="toggle-icon feather icon-disc font-medium-4 d-none d-xl-block collapse-toggle-icon primary" data-ticon="icon-disc"></i></a></li>
+                        </ul>
+                    </div>
+                    <!-- Horizontal menu content-->
+                    <div class="navbar-container main-menu-content" data-menu="menu-container">
+                        <!-- include ../../../includes/mixins-->
+                        <ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation">
+                            <li class="nav-item d-none d-lg-block"><a class="nav-link" href="<?php echo HTTP_HOST  ?>" data-toggle="tooltip" data-placement="top"><i class="feather icon-home"></i>Inicio</a></li>
+                            <li class="nav-item d-none d-lg-block"><a class="nav-link" href="<?php echo HTTP_HOST . 'alumno/' . $_SESSION['session_usr']['usr_id'] . '/kerdex-fichas' ?>" data-toggle="tooltip" data-placement="top"><i class="feather icon-grid"></i>Kardex de fichas</a></li>
+                            <li class="nav-item d-none d-lg-block"><a class="nav-link" href="<?php echo HTTP_HOST . 'alumno/' . $_SESSION['session_usr']['usr_id'] . '/kerdex-pagos' ?>" data-toggle="tooltip" data-placement="top"><i class="feather icon-grid"></i>Kardex de pagos</a></li>
+
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
         <!-- END: Main Menu-->
 
         <!-- BEGIN: Content-->
@@ -426,7 +475,12 @@
 
                     if (isset($_GET['ruta'])) {
                         //Traer la lista blanca de paginas adminitas
-                        $listaBlanca = AppControlador::obtenerListaBlanca();
+                        if ($_SESSION['session_usr']['usr_rol'] != "Alumno") {
+                            $listaBlanca = AppControlador::obtenerListaBlanca();
+                        }
+                        if ($_SESSION['session_usr']['usr_rol'] == "Alumno") {
+                            $listaBlanca = AppControlador::obtenerListaBlancaAlumno();
+                        }
 
                         //Guardad en la variable la ruta que venga de GET
 
@@ -507,6 +561,8 @@
         <script src="<?php echo HTTP_HOST . 'app/' ?>modulos/inscripciones/inscripciones.js"></script>
 
         <script src="<?php echo HTTP_HOST . 'app/' ?>modulos/pagos/pagos.js"></script>
+        <script src="<?php echo HTTP_HOST . 'app/' ?>modulos/gastos/gastos.js"></script>
+        <script src="<?php echo HTTP_HOST . 'app/' ?>modulos/ingresos/ingresos.js"></script>
     </body>
 <?php else :
 

@@ -323,8 +323,8 @@ if (isset($rutas[2]) && isset($rutas[3])) :
                                             <label for="vfch_cupon"></label>
                                             <input type="text" name="vfch_cupon" id="vfch_cupon" class="form-control">
                                             <small id="helpId" class="text-muted">Introduce el cupón aquí</small>
-                                            <button type="button" class="btn btn-sm btn-primary mt-1 float-right">Aplicar</button>
-                                            <input type="hidden" name="vfch_descuento" id="vfch_descuento" value="">
+                                            <button type="button" class="btn btn-sm btn-primary mt-1 float-right" id="btnAplicarCupon">Aplicar</button>
+                                            <input type="hidden" name="ppg_descuento" id="ppg_descuento">
                                         </div>
 
                                     </div>
@@ -351,8 +351,8 @@ if (isset($rutas[2]) && isset($rutas[3])) :
                             </div>
                             <div class="card-footer text-muted">
                                 <div class="form-group">
-                                    <input type="radio" id="enviar-chk_1" name="r1"> <label for="enviar-chk_1">Enviar comprobante por email</label> <br>
-                                    <input type="radio" id="enviar-chk_2" name="r1"> <label for="enviar-chk_2">Enviar comprobante por WhatsApp</label>
+                                    <!-- <input type="radio" id="enviar-chk_1" name="r1"> <label for="enviar-chk_1">Enviar comprobante por email</label> <br>
+                                    <input type="radio" id="enviar-chk_2" name="r1"> <label for="enviar-chk_2">Enviar comprobante por WhatsApp</label> -->
 
                                 </div>
                                 <div class="row">
@@ -538,6 +538,18 @@ if (isset($rutas[2]) && isset($rutas[3])) :
             </div>
         </div>
     </div>
+<?php
+elseif (isset($rutas[1]) && $rutas[1] == "ficha" && isset($rutas[2])) :
+    cargarComponente('breadcrumb', '', 'Ficha de pago');
+?>
+
+    <div class="container">
+
+        <embed src="<?php echo HTTP_HOST ?>/app/report/ficha_pago.php?fpg_id=<?php echo $rutas[2] ?>" width="100%" height="1200px" />
+
+    </div>
+
+
 <?php
 elseif (isset($rutas[1]) && $rutas[1] == "new") :
     cargarComponente('breadcrumb', '', 'Pagos');
@@ -893,27 +905,32 @@ elseif (isset($rutas[1]) && $rutas[1] == "new") :
 
         <div class="container">
             <div class="row">
-                <div class="col-12">
+                <div class="col-12 table-responsive">
                     <table class="table">
                         <thead>
-                            <tr>
+                            <tr style="background-color: #EDEDED;">
                                 <th>Matricula</th>
                                 <th>Alumno</th>
-                                <th>Ficha</th>
+                                <th style="text-align: right;">Ficha</th>
                             </tr>
-                            <tr>
+                            <tr style="background-color: #A7D3F3;">
                                 <th><?php echo $alumno['usr_matricula'] ?></th>
-                                <th><?php echo $alumno['usr_nombre'] ?></th>
-                                <th>#<?php echo $vfch['vfch_id'] ?></th>
+                                <th><?php echo $alumno['usr_nombre'].' '. $alumno['usr_app'] .' '. $alumno['usr_apm']  ?></th>
+
+                                <th style="text-align: right;">
+
+                                    <a class="btn btn-dark" href="<?php echo HTTP_HOST . 'pagos/ficha/' . $rutas[2] ?> " data-toggle="tooltip" data-placement="top" title="Ver ficha de pago" "><i class=" fa fa-file-pdf-o"></i> #<?php echo $vfch['vfch_id'] ?></a>
+
+                                </th>
                             </tr>
                         </thead>
 
                     </table>
                 </div>
-                <div class="col-12">
+                <div class="col-12 table-responsive">
                     <table class="table">
                         <thead>
-                            <tr>
+                            <tr style="background-color: #EDEDED;">
                                 <th>Sub monto</th>
                                 <th>Monto</th>
                                 <th>Metodo de pago</th>
@@ -921,21 +938,22 @@ elseif (isset($rutas[1]) && $rutas[1] == "new") :
                                 <th>Fecha registro</th>
                                 <th>Usuario registro</th>
                             </tr>
-                            <tr>
-                                <th><?php echo $vfch['vfch_sub_monto'] ?></th>
-                                <th><?php echo $vfch['vfch_monto'] ?></th>
-                                <th><?php echo $vfch['vfch_mp'] ?></th>
-                                <th><?php echo $vfch['vfch_referencia'] ?></th>
-                                <th><?php echo $vfch['vfch_fecha_registro'] ?></th>
-                                <th><?php echo $vfch['vfch_usuario_registro'] ?></th>
-                            </tr>
                         </thead>
+                        <tbody <tr style="background-color: #A7D3F3;">
+                            <td><?php echo $vfch['vfch_sub_monto'] ?></td>
+                            <td><?php echo $vfch['vfch_monto'] ?></td>
+                            <td><?php echo $vfch['vfch_mp'] ?></td>
+                            <td><?php echo $vfch['vfch_referencia'] ?></td>
+                            <td><?php echo $vfch['vfch_fecha_registro'] ?></td>
+                            <td><?php echo $vfch['vfch_usuario_registro'] ?></td>
+                            </tr>
+                        </tbody>
 
                     </table>
                 </div>
                 <div class="col-12">
                     <div class="col-12 table-responsive table-bordered tablaPagosAlumno table-striped  table-hover">
-                        <table class="table  dt-responsive ">
+                        <table class="table  dt-responsive table-responsive ">
                             <thead>
                                 <tr>
                                     <th># Número de pago</th>
@@ -974,7 +992,9 @@ elseif (isset($rutas[1]) && $rutas[1] == "new") :
                                         <td><?php echo $ppg['ppg_fecha_registro'] ?></td>
                                         <td><?php echo $ppg['ppg_usuario_registro'] ?></td>
                                         <td><?php echo $ppg['ppg_estado_pagado'] ?></td>
-                                        <td></td>
+                                        <td>
+
+                                        </td>
 
 
                                     </tr>
@@ -1043,7 +1063,11 @@ elseif (isset($rutas[1]) && $rutas[1] == "new") :
                                 <td><?php echo $ppg['vfch_fecha_pagada'] ?></td>
                                 <td><?php echo $ppg['vfch_usuario_registro'] ?></td>
                                 <td><?php echo $ppg['vfch_estado'] ?></td>
-                                <td></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a class="btn btn-info" href="<?php echo HTTP_HOST . 'pagos/ficha/' . $ppg['vfch_id'] ?> " data-toggle="tooltip" data-placement="top" title="Ver ficha de pago" "><i class=" fa fa-file-pdf-o"></i></a>
+                                    </div>
+                                </td>
 
 
                             </tr>

@@ -39,7 +39,7 @@ class InscripcionesControlador
                 return array(
                     'status' => true,
                     'mensaje' => 'Inscripción creada, a continuación completa tu pago',
-                    'pagina' => HTTP_HOST . 'pagos/new/' . $ruta['usr_matricula'] . '/' . $ruta['fpg_id']
+                    'pagina' => HTTP_HOST . 'inscripciones/fichas/' . $ruta['fpg_id']
                 );
             } else {
                 return array(

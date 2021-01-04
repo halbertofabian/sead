@@ -193,6 +193,14 @@ elseif (isset($rutas[1]) && $rutas[1] != "" && $rutas[1] == "update") : ?>
                             <div class="badge  badge-danger">
                                 <span><?php echo $pqt['pqt_sku'] ?></span>
                             </div>
+                            <div class="">
+                                <div class="btn-group float-right">
+                                    <a href="<?php echo HTTP_HOST . 'paquetes/update/' . $pqt['pqt_sku'] ?>" class="btn btn-warning btn-sm btnEditarPaquete" pqt_sku="<?php echo $pqt['pqt_sku']; ?>"><i class="fa fa-edit"></i></a>
+
+                                    <button class="btn btn-danger btn-sm btnEliminarPaquete" pqt_sku="<?php echo $pqt['pqt_sku']; ?>"><i class="fa fa-trash"></i></button>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

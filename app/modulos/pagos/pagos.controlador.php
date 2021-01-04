@@ -100,9 +100,11 @@ class PagosControlador
             $_POST['vfch_fecha_pagada'] = FECHA;
             $_POST['vfch_usuario_registro'] = $_SESSION['session_usr']['usr_nombre'];
             $_POST['vfch_estado'] = 'PAGADO';
+            $_POST['vfch_descuento'] = $_POST['vfch_cupon'];
 
             $terminarVenta = PagosModelo::mdlTerminarVenta($_POST);
             if ($terminarVenta) {
+                CuponesModelo::mdlAcualizarContadorCupon($_POST['vfch_cupon']);
                 if (PagosModelo::mdlCambiarEstadoAbono('PAGADO', $_POST['vfch_id'])) {
                     return array(
                         'status' => true,
@@ -126,6 +128,7 @@ class PagosControlador
         if (isset($_POST['btnAgregarPPG'])) {
             $_POST['ppg_monto'] = str_replace(",", "", $_POST['ppg_monto']);
             $_POST['ppg_adeudo'] =  str_replace(",", "", $_POST['ppg_adeudo'])  -  $_POST['ppg_monto'];
+            $_POST['ppg_total'] = str_replace(",", "", $_POST['ppg_monto']);
 
             $_POST['ppg_fecha_registro']  = FECHA;
             $_POST['ppg_usuario_registro']  = $_SESSION['session_usr']['usr_nombre'];
@@ -143,6 +146,37 @@ class PagosControlador
             if ($_POST['ppg_descuento'] != "") {
 
                 $desc = json_decode($_POST['ppg_descuento'], true);
+
+                if ($_POST['ppg_concepto'] == 'PPG_INSCRIPCION') {
+                    $_POST['ppg_descuento'] = $desc['cps_r_inscripcion'];
+                    $monto = $_POST['ppg_monto'];
+                    $_POST['ppg_total'] = ($monto) -  ($monto * $_POST['ppg_descuento'] / 100);
+                }
+                if ($_POST['ppg_concepto'] == 'PPG_EXAMEN') {
+                    $_POST['ppg_descuento'] = $desc['cps_r_examen'];
+                    $monto = $_POST['ppg_monto'];
+                    $_POST['ppg_total'] = ($monto) -  ($monto * $_POST['ppg_descuento'] / 100);
+                }
+                if ($_POST['ppg_concepto'] == 'PPG_GUIA') {
+                    $_POST['ppg_descuento'] = $desc['cps_r_guia'];
+                    $monto = $_POST['ppg_monto'];
+                    $_POST['ppg_total'] = ($monto) -  ($monto * $_POST['ppg_descuento'] / 100);
+                }
+                if ($_POST['ppg_concepto'] == 'PPG_INCORPORACION') {
+                    $_POST['ppg_descuento'] = $desc['cps_r_incorporacion'];
+                    $monto = $_POST['ppg_monto'];
+                    $_POST['ppg_total'] = ($monto) -  ($monto * $_POST['ppg_descuento'] / 100);
+                }
+                if ($_POST['ppg_concepto'] == 'PPG_CERTIFICADO') {
+                    $_POST['ppg_descuento'] = $desc['cps_r_certificado'];
+                    $monto = $_POST['ppg_monto'];
+                    $_POST['ppg_total'] = ($monto) -  ($monto * $_POST['ppg_descuento'] / 100);
+                }
+                if ($_POST['ppg_concepto'] == 'PPG_SEMANAL') {
+                    $_POST['ppg_descuento'] = $desc['cps_r_semanas'];
+                    $monto = $_POST['ppg_monto'];
+                    $_POST['ppg_total'] = ($monto) -  ($monto * $_POST['ppg_descuento'] / 100);
+                }
             }
             // if ($_POST['ppg_monto'] > $_POST['ppg_adeudo']) {
             //     return array(
@@ -233,6 +267,83 @@ class PagosControlador
     public static function ctrMostrarDatosFichaPago()
     {
         $dt_ficha = PagosModelo::mdlMostrarAbonosAlumno($_POST['fpg_id']);
+
+        $dt_incripcion = PagosModelo::mdlMostrarDatosFichaPago(array(
+            'ppg_ficha_pago' => $dt_ficha['fpg_id'],
+            'ppg_concepto' => 'PPG_INSCRIPCION',
+            'ppg_id_sucursal' => SUCURSAL_ID
+        ));
+        $dt_incripcion_adeudo = $dt_incripcion['ppg_adeudo'] == "" ? $dt_ficha['fpg_inscripcion'] : $dt_incripcion['ppg_adeudo'];
+
+        $dt_examen = PagosModelo::mdlMostrarDatosFichaPago(array(
+            'ppg_ficha_pago' => $dt_ficha['fpg_id'],
+            'ppg_concepto' => 'PPG_EXAMEN',
+            'ppg_id_sucursal' => SUCURSAL_ID
+        ));
+        $dt_examen_adeudo = $dt_examen['ppg_adeudo'] == "" ? $dt_ficha['fpg_examen'] : $dt_examen['ppg_adeudo'];
+
+        $dt_guia = PagosModelo::mdlMostrarDatosFichaPago(array(
+            'ppg_ficha_pago' => $dt_ficha['fpg_id'],
+            'ppg_concepto' => 'PPG_GUIA',
+            'ppg_id_sucursal' => SUCURSAL_ID
+        ));
+        $dt_guia_adeudo = $dt_guia['ppg_adeudo'] == "" ? $dt_ficha['fpg_guia'] : $dt_guia['ppg_adeudo'];
+
+        $dt_incorporacion = PagosModelo::mdlMostrarDatosFichaPago(array(
+            'ppg_ficha_pago' => $dt_ficha['fpg_id'],
+            'ppg_concepto' => 'PPG_INCORPORACION',
+            'ppg_id_sucursal' => SUCURSAL_ID
+        ));
+        $dt_incorporacion_adeudo = $dt_incorporacion['ppg_adeudo'] == "" ? $dt_ficha['fpg_incorporacion'] : $dt_incorporacion['ppg_adeudo'];
+
+        $dt_certificado = PagosModelo::mdlMostrarDatosFichaPago(array(
+            'ppg_ficha_pago' => $dt_ficha['fpg_id'],
+            'ppg_concepto' => 'PPG_CERTIFICADO',
+            'ppg_id_sucursal' => SUCURSAL_ID
+        ));
+        $dt_certificado_adeudo = $dt_certificado['ppg_adeudo'] == "" ? $dt_ficha['fpg_certificado'] : $dt_certificado['ppg_adeudo'];
+
+        $dt_semanal = PagosModelo::mdlMostrarDatosFichaPago(array(
+            'ppg_ficha_pago' => $dt_ficha['fpg_id'],
+            'ppg_concepto' => 'PPG_SEMANAL',
+            'ppg_id_sucursal' => SUCURSAL_ID
+        ));
+        $dt_semanal_adeudo = $dt_semanal['ppg_adeudo'] == "" ? $dt_ficha['fpg_semana'] * $dt_ficha['fpg_numero_semana'] : $dt_semanal['ppg_adeudo'];
+
+
+        return array(
+            'PPG_INSCRIPCION' => array(
+                'total' => $dt_ficha['fpg_inscripcion'],
+                'adeudo' => $dt_incripcion_adeudo
+            ),
+            'PPG_EXAMEN' => array(
+                'total' => $dt_ficha['fpg_examen'],
+                'adeudo' => $dt_examen_adeudo
+            ),
+            'PPG_GUIA' => array(
+                'total' => $dt_ficha['fpg_guia'],
+                'adeudo' => $dt_guia_adeudo
+            ),
+            'PPG_INCORPORACION' => array(
+                'total' => $dt_ficha['fpg_incorporacion'],
+                'adeudo' => $dt_incorporacion_adeudo
+            ),
+
+            'PPG_CERTIFICADO' => array(
+                'total' => $dt_ficha['fpg_certificado'],
+                'adeudo' => $dt_certificado_adeudo
+            ),
+            'PPG_SEMANAL' => array(
+                'total' => $dt_ficha['fpg_semana'] * $dt_ficha['fpg_numero_semana'],
+                'adeudo' => $dt_semanal_adeudo,
+                'pago_semanal' => $dt_ficha['fpg_semana']
+            ),
+        );
+    }
+
+    public static function ctrMostrarDatosFichaPagoByFicha($fpg_id)
+    {
+        $dt_ficha = PagosModelo::mdlMostrarAbonosAlumno($fpg_id);
 
         $dt_incripcion = PagosModelo::mdlMostrarDatosFichaPago(array(
             'ppg_ficha_pago' => $dt_ficha['fpg_id'],
@@ -433,6 +544,87 @@ class PagosControlador
                     'vfch_id' => $_POST['vfch_id']
                 );
             }
+        }
+    }
+
+    public static function ctrAplicarCupon()
+    {
+        if (isset($_POST['btnAplicarCupon'])) {
+
+
+
+            $cps = CuponesModelo::mdlMostrarCupones($_POST['vfch_cupon']);
+
+
+            // Consultar si existe
+            if ($cps == false) {
+                return array(
+                    'status' => false,
+                    'mensaje' => 'Este cupón no existe, intenta con otro'
+                );
+            }
+            // Consultar si esta disponible
+            if ($cps['cps_estado'] == 0) {
+                return array(
+                    'status' => false,
+                    'mensaje' => 'Cupón no disponible'
+                );
+            }
+
+            // Consultar si hay tope
+            if ($cps['cps_tope'] != "-") {
+                if ($cps['cps_tope'] == 0) {
+                    return array(
+                        'status' => false,
+                        'mensaje' => 'Cupón agotado'
+                    );
+                }
+            }
+
+            // Consultar el tipo de cupon
+            $restrinciones = json_decode($cps['cps_restricciones'], true);
+
+
+            // Restricciones de usuo por matricula
+            if ($restrinciones['aply']['tipo'] == 'by_matricula') {
+                $data = array();
+                $data = explode(",", $restrinciones['aply']['data']);
+                $bandera = false;
+                foreach ($data as $key => $usr_matricula) {
+                    if ($usr_matricula == $_POST['vfch_alumno']) {
+                        $bandera = true;
+                    }
+                }
+                if (!$bandera) {
+                    return array(
+                        'status' => false,
+                        'mensaje' => 'Este cupón no es valido para este alumno'
+                    );
+                }
+            }
+
+            // Restrición de fecha
+            if (FECHA <= $cps['cps_fecha_inicio']) {
+                return array(
+                    'status' => false,
+                    'mensaje' => 'Este cupón aún no esta disponible'
+                );
+            }
+
+            if ($cps['cps_fecha_fin'] != "0000-00-00 00:00:00") {
+                if ($cps['cps_fecha_fin'] <= FECHA) {
+                    return array(
+                        'status' => false,
+                        'mensaje' => 'Este cupón ya caduco'
+                    );
+                }
+            }
+
+            return array(
+                'status' => true,
+                'mensaje' => 'Cupón aplicado',
+                'data' => $restrinciones['cupon']
+            );
         }
     }
 }

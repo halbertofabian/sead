@@ -67,10 +67,10 @@ $(".btngenerarSKU").on("click", function () {
     var pqt_sku = "";
 
     if (pqt_nombre != "") {
-        pqt_sku = pqt_nombre.replace(/\ /g, "_"); 
+        pqt_sku = pqt_nombre.replace(/\ /g, "_");
     } else {
 
-        pqt_sku = uuid.v4();
+        pqt_sku = Math.floor(Math.random() * 99999999);
 
     }
 

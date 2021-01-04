@@ -60,12 +60,12 @@ function buscarAlumnoMatricula(usr_matricula = "") {
                             `
                         <tr>
                             <td>${fpg.usr_matricula}</td>
-                            <td>${fpg.usr_nombre}</td>
+                            <td>${fpg.usr_nombre} ${fpg.usr_app} ${fpg.usr_apm}</td>
                             
                             <td>${fpg.pqt_nombre}</td>
                             <td>${fpg.fpg_fecha_registro}</td>
                             <td>
-                                 <a href="${urlApp+'pagos/new/'+fpg.usr_matricula+'/'+fpg.fpg_id}" class="btn btn-warning btnAbonar" fpg_id="${fpg.fpg_id}"><i class="fa fa-money" aria-hidden="true"></i> Abonar</a>
+                                 <a href="${urlApp + 'pagos/new/' + fpg.usr_matricula + '/' + fpg.fpg_id}" class="btn btn-warning btnAbonar" fpg_id="${fpg.fpg_id}"><i class="fa fa-money" aria-hidden="true"></i> Abonar</a>
                             </td>
                         </tr>
 
@@ -382,17 +382,17 @@ $("#formAbonoAlumno").on("submit", function (e) {
                                 title: "!Muy bien¡",
                                 text: res.mensaje,
                                 icon: "success",
-                                buttons: [false,"Continuar"],
+                                buttons: [false, "Continuar"],
                                 dangerMode: true,
                                 closeOnClickOutside: false,
                             })
-                            .then((willDelete) => {
-                                if (willDelete) {
-                                    location.href = res.pagina
-                                } else {
-                                    location.href = res.pagina
-                                }
-                            });
+                                .then((willDelete) => {
+                                    if (willDelete) {
+                                        location.href = res.pagina
+                                    } else {
+                                        location.href = res.pagina
+                                    }
+                                });
 
                             // BuscarFichaPago($("#fpg_id").val())
                             // BuscarAbonoConcepto($("#ppg_concepto").val(), $("#fpg_id").val())
@@ -579,6 +579,7 @@ function listarCarrito() {
 
     datos.append("ppg_ficha_pago", $("#fpg_id").val())
     datos.append("ppg_ficha_venta", $("#vfch_id").val())
+    datos.append("vfch_descuento", $("#vfch_descuento").val())
     datos.append("btnListarCarrito", true)
     $.ajax({
         type: "POST",
@@ -604,7 +605,12 @@ function listarCarrito() {
             var ppg_monto_total = 0;
             res.forEach(ppg => {
                 ppg_sub_total += Number(ppg.ppg_monto);
-                ppg_monto_total = Number(ppg.ppg_monto) - Number(ppg.ppg_monto) * Number(ppg.ppg_descuento) / 100
+                if(Number(ppg.ppg_descuento) >0){
+                    ppg_monto_total = (Number(ppg.ppg_monto)) - (Number(ppg.ppg_monto) * Number(ppg.ppg_descuento) / 100)
+                }else{
+                    ppg_monto_total = ppg.ppg_monto
+                }
+                // ppg_monto_total = (Number(ppg.ppg_monto)) - (Number(ppg.ppg_monto) * Number(ppg.ppg_descuento) / 100)
                 ppg_total += Number(ppg_monto_total);
 
                 contenido += `                             
@@ -627,12 +633,48 @@ function listarCarrito() {
 
 }
 
-// $("#btnImprimir").on("click", function () {
+$("#btnAplicarCupon").on("click", function () {
+    var vfch_cupon = $("#vfch_cupon").val()
+    var vfch_alumno = $("#vfch_alumno").val()
+    var fpg_id = $("#fpg_id").val()
+    var vfch_id = $("#vfch_id").val()
 
-//     var ficha = document.getElementById('tablaPagosAlumno');
-//     var ventimp = window.open(' ', 'popimpr');
-//     ventimp.document.write(ficha.innerHTML);
-//     ventimp.document.close();
-//     ventimp.print();
-//     ventimp.close();
-// })
+    if (vfch_cupon == "") {
+        toastr.error('El campo cupón esta vacio', '¡Error!')
+        return;
+    }
+    var datos = new FormData()
+
+    datos.append("vfch_cupon", vfch_cupon)
+    datos.append("vfch_alumno", vfch_alumno)
+    datos.append("fpg_id", fpg_id)
+    datos.append("vfch_id", vfch_id)
+    datos.append("btnAplicarCupon", true)
+
+    $.ajax({
+        type: "POST",
+        url: urlApp + 'app/modulos/pagos/pagos.ajax.php',
+        data: datos,
+        cache: false,
+        dataType: "json",
+        processData: false,
+        contentType: false,
+        beforeSend: function () {
+
+        },
+        success: function (res) {
+
+            if (res.status) {
+                toastr.success(res.mensaje, 'Muy bien!')
+
+                $("#ppg_descuento").val(JSON.stringify(res.data))
+                $("#vfch_cupon").attr('readonly', true)
+
+            } else {
+                toastr.error(res.mensaje, '¡Error!')
+            }
+
+        }
+
+    })
+})

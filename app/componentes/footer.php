@@ -39,6 +39,9 @@
 
 <script src="<?php echo HTTP_HOST . 'app/' ?>modulos/cupones/cupones.js"></script>
 
+<script src="<?php echo HTTP_HOST . 'app/' ?>modulos/gastos/gastos.js"></script>
+<script src="<?php echo HTTP_HOST . 'app/' ?>modulos/ingresos/ingresos.js"></script>
+
 
 
 

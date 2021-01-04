@@ -11,11 +11,27 @@ class AppControlador
             'medios',
             'pos',
             'alumnos',
-            'configuracion', 
+            'configuracion',
             'paquetes',
             'inscripciones',
             'pagos',
-            'cupones'
+            'cupones',
+            'alumno',
+            'gastos',
+            'ingresos',
+            'listar-gastos',
+            'listar-ingresos',
+            'categorias',
+            'mi-perfil'
+        );
+    }
+    public static function obtenerListaBlancaAlumno()
+    {
+        return array(
+            'bienvenido',
+            'salir',
+            'alumno',
+            'mi-perfil'
         );
     }
 

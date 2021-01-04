@@ -17,8 +17,10 @@ include_once '../../../config.php';
 
 require_once DOCUMENT_ROOT . 'app/modulos/pagos/pagos.modelo.php';
 require_once DOCUMENT_ROOT . 'app/modulos/usuarios/usuarios.modelo.php';
+require_once DOCUMENT_ROOT . 'app/modulos/cupones/cupones.modelo.php';
 require_once DOCUMENT_ROOT . 'app/modulos/pagos/pagos.controlador.php';
 require_once DOCUMENT_ROOT . 'app/modulos/usuarios/usuarios.controlador.php';
+require_once DOCUMENT_ROOT . 'app/modulos/cupones/cupones.controlador.php';
 require_once DOCUMENT_ROOT . 'app/modulos/app/app.controlador.php';
 class PagosAjax
 
@@ -64,7 +66,7 @@ class PagosAjax
     }
     public function ajaxAgregarCarrito()
     {
-        
+
         $res = PagosControlador::ctrAgregarCarrito();
         echo json_encode($res, true);
     }
@@ -76,7 +78,12 @@ class PagosAjax
 
     public function ajaxListarCarrito()
     {
-        $res = PagosModelo::mdlMostrarCarritoAlumno($this->ppg_ficha_pago,$this->ppg_ficha_venta);
+        $res = PagosModelo::mdlMostrarCarritoAlumno($this->ppg_ficha_pago, $this->ppg_ficha_venta);
+        echo json_encode($res, true);
+    }
+    public function ajaxAplicarCupon()
+    {
+        $res = PagosControlador::ctrAplicarCupon();
         echo json_encode($res, true);
     }
 }
@@ -119,16 +126,19 @@ if (isset($_POST['btnAgregarPPG'])) {
 }
 if (isset($_POST['btnQuitarElementoCarrito'])) {
     $revisarPgos = new PagosAjax();
-    $revisarPgos -> ppg_id = $_POST['ppg_id'];
+    $revisarPgos->ppg_id = $_POST['ppg_id'];
     $revisarPgos->ajaxQuitarCarrito();
 }
 
 if (isset($_POST['btnListarCarrito'])) {
     $revisarPgos = new PagosAjax();
-    $revisarPgos -> ppg_ficha_pago = $_POST['ppg_ficha_pago'];
-    $revisarPgos -> ppg_ficha_venta = $_POST['ppg_ficha_venta'];
+    $revisarPgos->ppg_ficha_pago = $_POST['ppg_ficha_pago'];
+    $revisarPgos->ppg_ficha_venta = $_POST['ppg_ficha_venta'];
     $revisarPgos->ajaxListarCarrito();
 }
 
 
-
+if (isset($_POST['btnAplicarCupon'])) {
+    $revisarPgos = new PagosAjax();
+    $revisarPgos->ajaxAplicarCupon();
+}

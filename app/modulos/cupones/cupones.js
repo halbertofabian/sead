@@ -12,15 +12,15 @@
 
 
 $(".cps_aply_ok").on("click", function () {
-    $("#cps_aply_email").removeClass("d-none");
-    $("#cps_aply_email").attr("required", true);
+    $("#cps_aply_matricula").removeClass("d-none");
+    $("#cps_aply_matricula").attr("required", true);
 
 
 })
 
 $(".cps_aply").on("click", function () {
-    $("#cps_aply_email").addClass("d-none");
-    $("#cps_aply_email").attr("required", false);
+    $("#cps_aply_matricula").addClass("d-none");
+    $("#cps_aply_matricula").attr("required", false);
 })
 
 $("#formAgregarCupones").on("submit", function (e) {
@@ -48,20 +48,20 @@ $("#formAgregarCupones").on("submit", function (e) {
                     title: "¡Muy bien!",
                     text: res.mensaje,
                     icon: "success",
-                    buttons: [false,"Continuar"],
+                    buttons: [false, "Continuar"],
                     dangerMode: true,
                     closeOnClickOutside: false,
                 })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        location.href = res.pagina
-                    } else {
-                        location.href = res.pagina
-                    }
-                });
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            location.href = res.pagina
+                        } else {
+                            location.href = res.pagina
+                        }
+                    });
 
             } else {
-                toastr.error( res.mensaje, 'Error')
+                toastr.error(res.mensaje, 'Error')
             }
 
         }

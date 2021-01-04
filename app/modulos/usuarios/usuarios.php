@@ -17,32 +17,39 @@
 
             $usr = UsuariosModelo::mdlMostrarUsuarios($rutas[2]); ?>
             <div class="container">
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     <div class="row">
-                        <div class="col-md-8 col-12">
+                        <div class="col-md-3 col-12">
                             <div class="form-group">
-                                <label for="usr_nombre">Nombre</label>
-                                <input type="text" name="usr_nombre" id="usr_nombre" value="<?php echo $usr['usr_nombre'] ?>" class="form-control" placeholder="Escribe el nombre de usuario" required>
+                                <label for="usr_matricula">Usuario</label>
+
+                                <input type="text" name="usr_matricula" id="usr_matricula" class="form-control" placeholder="Escribe el nombre completo del alumno" value="<?php echo $usr['usr_matricula'] ?>" readonly required>
+                                <input type="hidden" name="usr_id" id="usr_id" class="form-control" placeholder="Escribe el nombre completo del alumno" value="<?php echo $usr['usr_id'] ?>" readonly required>
                             </div>
                         </div>
-                        <div class="col-md-4 col-12">
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <label for="usr_nombre">Nombre</label>
+                                <input type="text" name="usr_nombre" id="usr_nombre" class="form-control" placeholder="Escribe el nombre de usuario" value="<?php echo $usr['usr_nombre'] ?>" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-12">
                             <div class="form-group">
                                 <label for="usr_telefono">Teléfono</label>
-                                <input type="text" name="usr_telefono" id="usr_telefono" value="<?php echo $usr['usr_telefono'] ?>" class="form-control" placeholder="Escribe el telefono">
+                                <input type="text" name="usr_telefono" id="usr_telefono" class="form-control" placeholder="Escribe el telefono" value="<?php echo $usr['usr_telefono'] ?>">
                             </div>
                         </div>
                         <div class="col-md-4 col-12">
                             <div class="form-group">
                                 <label for="usr_correo">Correo electrónico</label>
-                                <input type="email" name="usr_correo" id="usr_correo" value="<?php echo $usr['usr_correo'] ?>" class="form-control" placeholder="Escribe el correo electrónico" required>
+                                <input type="email" name="usr_correo" id="usr_correo" class="form-control" placeholder="Escribe el correo electrónico" value="<?php echo $usr['usr_correo'] ?>" required>
                             </div>
                         </div>
                         <div class="col-md-4 col-12">
                             <div class="form-group">
-                                <label for="usr_clave">Contraseña</label>
-                                <input type="password" name="usr_clave" id="usr_clave" class="form-control" placeholder="Escribe la contraseña">
-                                <input type="hidden" value="<?php echo $usr['usr_clave'] ?>" name="usr_clave_hidden">
-                                <input type="hidden" value="<?php echo $usr['usr_id'] ?>" name="usr_id">
+                                <label for="usr_clave" class="placeholder"><b>Contraseña</b></label>
+                                <input id="usr_clave" name="usr_clave" type="password" class="form-control">
+                                <input id="usr_clave_hidden" name="usr_clave_hidden" type="hidden" class="form-control" value="<?php echo $usr['usr_clave'] ?>" required>
 
                             </div>
                         </div>
@@ -50,27 +57,47 @@
                             <div class="form-group">
                                 <label for="usr_rol">Perfil</label>
                                 <select name="usr_rol" id="usr_rol" class="form-control">
+
                                     <option value="<?php echo $usr['usr_rol'] ?>"><?php echo $usr['usr_rol'] ?></option>
                                     <option value="Administrador">Administrador</option>
                                     <option value="Ejecutivo">Ejecutivo</option>
+                                    <option value="Vendedor">Vendedor</option>
+                                    <option value="Caja">Caja</option>
+                                    <option value="Auditor">Auditor</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-8 col-12">
-                            <div class="form-group">
-                                <label for="usr_direccion">Dirección</label>
-                                <input type="text" name="usr_direccion" value="<?php echo $usr['usr_direccion'] ?>" id="usr_direccion" class="form-control" placeholder="Escribe la dirección">
+                        <?php if ($usr['usr_firma'] != "") : ?>
+                            <div class="col-md-4 col-12 text-center">
+                                <span>Firma digital</span> <br>
+                                <img src="<?php echo HTTP_HOST . '' . $usr['usr_firma'] ?>" alt="">
                             </div>
-                        </div>
-                        <div class="col-md-4 col-12">
+                            <div class="col-md-4 col-12">
+                                <div class="form-group">
+                                    <label for="usr_firma">Firma digital</label>
+                                    <input type="file" name="usr_firma" id="usr_firma" class="form-control">
+                                    <small id="helpId" class="text-muted float-right">200 x 200 px</small>
+                                </div>
+                            </div>
+                        <?php else : ?>
+                            <div class="col-md-4 col-12">
+                                <div class="form-group">
+                                    <label for="usr_firma">Firma digital</label>
+                                    <input type="file" name="usr_firma" id="usr_firma" class="form-control">
+                                    <small id="helpId" class="text-muted float-right">200 x 200 px</small>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                        <input type="hidden" value="<?php echo $usr['usr_firma'] ?>" name="usr_firma_hidden">
+                        <div class="col-md-12 col-12">
                             <div class="form-group">
-                                <input type="submit" value="Actualizar usuario" name="btnActualizarUsuario" id="btnActualizarUsuario" class="btn btn-primary float-right mt-4">
+                                <input type="submit" value="Guardar cambios" name="btnActualizarUsuario" id="btnActualizarUsuario" class="btn btn-primary float-right" placeholder="Escribe la dirección">
                             </div>
                         </div>
                     </div>
                     <?php
-                    $actualizarUsuario = new UsuariosControlador();
-                    $actualizarUsuario->ctrActualizarUsuarios();
+                    $actualizarUusario = new UsuariosControlador();
+                    $actualizarUusario->ctrActualizarUsuarios2();
                     ?>
                 </form>
             </div>
@@ -82,15 +109,26 @@
 
 
             <div class="container">
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     <div class="row">
-                        <div class="col-md-8 col-12">
+                        <div class="col-md-3 col-12">
+                            <div class="form-group">
+                                <label for="usr_matricula">Usuario</label>
+                                <?php
+
+                                $usr_id = UsuariosControlador::ctrConsultarSiguienteUsuario('');
+
+                                ?>
+                                <input type="text" name="usr_matricula" id="usr_matricula" class="form-control" placeholder="Escribe el nombre completo del alumno" value="<?php echo $usr_id ?>" readonly required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <label for="usr_nombre">Nombre</label>
                                 <input type="text" name="usr_nombre" id="usr_nombre" class="form-control" placeholder="Escribe el nombre de usuario" required>
                             </div>
                         </div>
-                        <div class="col-md-4 col-12">
+                        <div class="col-md-3 col-12">
                             <div class="form-group">
                                 <label for="usr_telefono">Teléfono</label>
                                 <input type="text" name="usr_telefono" id="usr_telefono" class="form-control" placeholder="Escribe el telefono">
@@ -105,13 +143,7 @@
                         <div class="col-md-4 col-12">
                             <div class="form-group">
                                 <label for="usr_clave" class="placeholder"><b>Contraseña</b></label>
-
-                                <div class="position-relative">
-                                    <input id="usr_clave" name="usr_clave" type="password" class="form-control" required>
-                                    <div class="show-password">
-                                        <i class="icon-eye float-right"></i>
-                                    </div>
-                                </div>
+                                <input id="usr_clave" name="usr_clave" type="password" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-md-4 col-12">
@@ -120,24 +152,28 @@
                                 <select name="usr_rol" id="usr_rol" class="form-control">
                                     <option value="Administrador">Administrador</option>
                                     <option value="Ejecutivo">Ejecutivo</option>
+                                    <option value="Vendedor">Vendedor</option>
+                                    <option value="Caja">Caja</option>
+                                    <option value="Auditor">Auditor</option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="col-md-8 col-12">
-                            <div class="form-group">
-                                <label for="usr_direccion">Dirección</label>
-                                <input type="text" name="usr_direccion" id="usr_direccion" class="form-control" placeholder="Escribe la dirección">
                             </div>
                         </div>
                         <div class="col-md-4 col-12">
                             <div class="form-group">
-                                <input type="submit" value="Guardar usuario" name="btnGuardarUsuario" id="btnGuardarUsuario" class="btn btn-primary float-right mt-4" placeholder="Escribe la dirección">
+                                <label for="usr_firma">Firma digital</label>
+                                <input type="file" name="usr_firma" id="usr_firma" class="form-control">
+                                <small id="helpId" class="text-muted float-right">200 x 200 px</small>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-12">
+                            <div class="form-group">
+                                <input type="submit" value="Guardar usuario" name="btnGuardarUsuario" id="btnGuardarUsuario" class="btn btn-primary float-right" placeholder="Escribe la dirección">
                             </div>
                         </div>
                     </div>
                     <?php
                     $guardarUsuario = new UsuariosControlador();
-                    $guardarUsuario->ctrAgregarUsuarios();
+                    $guardarUsuario->ctrAgregarUsuarios2();
                     ?>
                 </form>
             </div>
@@ -151,7 +187,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-                        <a href="" class="btn btn-success"><i class="fa fa-upload"></i> Importar</a>
+                        <!-- <a href="" class="btn btn-success"><i class="fa fa-upload"></i> Importar</a> -->
                         <a href="<?php echo HTTP_HOST . 'usuarios/new' ?>" class="btn btn-primary float-right"> <i class="fa fa-plus"></i> Nuevo usuario</a>
                     </div>
                     <div class="col-12">
@@ -163,7 +199,8 @@
                                         <th>Teléfono</th>
                                         <th>Correo electrónico</th>
                                         <th>Rol</th>
-                                        <th>Dirección</th>
+                                        <th>Usuario registro</th>
+                                        <th>Fecha registro</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
@@ -177,7 +214,9 @@
                                             <td><?php echo $usr['usr_telefono'] ?></td>
                                             <td><?php echo $usr['usr_correo'] ?></td>
                                             <td><?php echo $usr['usr_rol'] ?></td>
-                                            <td><?php echo $usr['usr_direccion'] ?></td>
+                                            <td><?php echo $usr['usr_usuario_registro'] ?></td>
+                                            <td><?php echo $usr['usr_fecha_registro'] ?></td>
+
                                             <td>
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

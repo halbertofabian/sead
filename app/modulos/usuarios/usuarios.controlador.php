@@ -30,15 +30,109 @@ class UsuariosControlador
         }
     }
 
+    public function ctrAgregarUsuarios2($url_destino = "usuarios")
+    {
+        if (isset($_POST['btnGuardarUsuario'])) {
+
+
+            $ruta = "";
+
+            if (isset($_FILES["usr_firma"]["tmp_name"])) {
+
+                list($ancho, $alto) = getimagesize($_FILES["usr_firma"]["tmp_name"]);
+
+                $nuevoAncho = 200;
+                $nuevoAlto = 200;
+
+                /*=============================================
+					CREAMOS EL DIRECTORIO DONDE VAMOS A GUARDAR LA FOTO DEL Producto
+					=============================================*/
+                $fileimg = md5($_POST["usr_matricula"]);
+
+                $directorio = "app/upload/firmas_digitales";
+
+                if (!file_exists($directorio))
+                    mkdir($directorio, 0777);
+
+                /*=============================================
+					DE ACUERDO AL TIPO DE IMAGEN APLICAMOS LAS FUNCIONES POR DEFECTO DE PHP
+					=============================================*/
+
+                if ($_FILES["usr_firma"]["type"] == "image/jpeg") {
+
+                    /*=============================================
+						GUARDAMOS LA IMAGEN EN EL DIRECTORIO
+						=============================================*/
+
+                    //$aleatorio = mt_rand(100, 999);
+
+                    $ruta = $directorio.'/'. $_POST['usr_matricula'] . ".jpg";
+
+                    $origen = imagecreatefromjpeg($_FILES["usr_firma"]["tmp_name"]);
+
+                    $destino = imagecreatetruecolor($nuevoAncho, $nuevoAlto);
+
+                    imagecopyresized($destino, $origen, 0, 0, 0, 0, $nuevoAncho, $nuevoAlto, $ancho, $alto);
+
+                    imagejpeg($destino, $ruta);
+                }
+
+                if ($_FILES["usr_firma"]["type"] == "image/png") {
+
+
+
+
+
+
+                    /*=============================================
+						GUARDAMOS LA IMAGEN EN EL DIRECTORIO
+						=============================================*/
+
+                    $ruta = $directorio.'/'. $_POST['usr_matricula'] . ".png";
+
+                    $origen = imagecreatefrompng($_FILES["usr_firma"]["tmp_name"]);
+
+
+                    $destino = imagecreatetruecolor($nuevoAncho, $nuevoAlto);
+
+                    // Linea nueva
+                    imagefill($destino, 0, 0, imagecolorallocate($destino, 255, 255, 255));
+                    //
+
+                    imagecopyresized($destino, $origen, 0, 0, 0, 0, $nuevoAncho, $nuevoAlto, $ancho, $alto);
+
+                    imagepng($destino, $ruta);
+                }
+            }
+
+
+            $_POST['usr_firma'] = $ruta;
+            $_POST['usr_clave'] = password_hash($_POST['usr_clave'], PASSWORD_DEFAULT);
+            $_POST['usr_usuario_registro'] = $_SESSION['session_usr']['usr_nombre'];
+            $_POST['usr_fecha_registro'] = FECHA;
+
+            $agregarUsuario = UsuariosModelo::mdlAgregarUsuarios2($_POST);
+
+            if ($agregarUsuario) {
+                AppControlador::msj('success', 'Muy bien', 'Usuario registrado', HTTP_HOST . $url_destino);
+            } else {
+                AppControlador::msj('error', 'Error', 'Este usuario ya existe, asegurate de verificar el correo');
+            }
+        }
+    }
+
 
     public static  function ctrAgregarUsuariosAjax()
     {
         if (isset($_POST['btnGuardarUsuario'])) {
+            $_POST['usr_matricula'] = UsuariosControlador::ctrConsultarSiguienteUsuario();
+
+
+
 
             $_POST['usr_clave'] = "";
             $_POST['usr_usuario_registro'] = $_SESSION['session_usr']['usr_nombre'];
             $_POST['usr_fecha_registro'] = FECHA;
-            $_POST['usr_matricula'] = UsuariosControlador::ctrConsultarSiguienteUsuario();
 
 
             $agregarUsuario = UsuariosModelo::mdlAgregarUsuarios($_POST);
@@ -69,6 +163,100 @@ class UsuariosControlador
             }
 
             $actualizarUsuario = UsuariosModelo::mdlActualizarUsuarios($_POST);
+
+
+
+            if ($actualizarUsuario) {
+                AppControlador::msj('success', 'Muy bien', 'Usuario actualizado', HTTP_HOST . $url_destino);
+            } else {
+                // AppControlador::msj('error', 'Error', 'Este usuario ya existe, asegurate de verificar el correo');
+            }
+        }
+    }
+    public function ctrActualizarUsuarios2($url_destino = "usuarios")
+    {
+        if (isset($_POST['btnActualizarUsuario'])) {
+
+
+            preArray($_POST);
+            preArray($_FILES);
+            $ruta = $_POST['usr_firma_hidden'];
+
+            if (isset($_FILES["usr_firma"]["tmp_name"]) && $_FILES["usr_firma"]["tmp_name"] != "") {
+
+                list($ancho, $alto) = getimagesize($_FILES["usr_firma"]["tmp_name"]);
+
+                $nuevoAncho = 200;
+                $nuevoAlto = 200;
+
+                /*=============================================
+					CREAMOS EL DIRECTORIO DONDE VAMOS A GUARDAR LA FOTO DEL Producto
+					=============================================*/
+                $fileimg = md5(uniqid());
+
+                $directorio = "app/upload/firmas_digitales/" . $fileimg;
+
+                if (!file_exists($directorio))
+                    mkdir($directorio, 0777);
+
+                /*=============================================
+					DE ACUERDO AL TIPO DE IMAGEN APLICAMOS LAS FUNCIONES POR DEFECTO DE PHP
+					=============================================*/
+
+                if ($_FILES["usr_firma"]["type"] == "image/jpeg") {
+
+                    /*=============================================
+						GUARDAMOS LA IMAGEN EN EL DIRECTORIO
+						=============================================*/
+
+                    //$aleatorio = mt_rand(100, 999);
+
+                    $ruta = $directorio.'/'. $_POST['usr_matricula'] . ".jpg";
+
+                    $origen = imagecreatefromjpeg($_FILES["usr_firma"]["tmp_name"]);
+
+                    $destino = imagecreatetruecolor($nuevoAncho, $nuevoAlto);
+
+                    imagecopyresized($destino, $origen, 0, 0, 0, 0, $nuevoAncho, $nuevoAlto, $ancho, $alto);
+
+                    imagejpeg($destino, $ruta);
+                }
+
+                if ($_FILES["usr_firma"]["type"] == "image/png") {
+                    /*=============================================
+						GUARDAMOS LA IMAGEN EN EL DIRECTORIO
+						=============================================*/
+
+                    $ruta = $directorio.'/'. $_POST['usr_matricula'] . ".png";
+
+
+                    $origen = imagecreatefrompng($_FILES["usr_firma"]["tmp_name"]);
+
+
+                    $destino = imagecreatetruecolor($nuevoAncho, $nuevoAlto);
+
+                    // Linea nueva
+                    imagefill($destino, 0, 0, imagecolorallocate($destino, 255, 255, 255));
+                    //
+
+                    imagecopyresized($destino, $origen, 0, 0, 0, 0, $nuevoAncho, $nuevoAlto, $ancho, $alto);
+
+                    imagepng($destino, $ruta);
+                }
+            }
+
+            var_dump($ruta);
+
+
+
+            $_POST['usr_firma'] = $ruta;
+            if ($_POST['usr_clave'] == "") {
+                $_POST['usr_clave'] = $_POST['usr_clave_hidden'];
+            } else {
+                $_POST['usr_clave'] = password_hash($_POST['usr_clave'], PASSWORD_DEFAULT);
+            }
+
+            $actualizarUsuario = UsuariosModelo::mdlActualizarUsuarios2($_POST);
 
 
 
@@ -334,7 +522,7 @@ class UsuariosControlador
         }
     }
 
-    public static function ctrConsultarSiguienteUsuario()
+    public static function ctrConsultarSiguienteUsuario($sub_fijo = SUB_FIJO)
     {
         $usr_id = UsuariosModelo::mdlConsultarUltimoUsuario();
         $usr_id['usr_id'] = $usr_id['usr_id'] + 1;
@@ -342,6 +530,6 @@ class UsuariosControlador
         $usr_id['usr_id'] =  strlen($usr_id['usr_id']) == 1 ? "000" . $usr_id['usr_id'] : $usr_id['usr_id'];
         $usr_id['usr_id'] =  strlen($usr_id['usr_id']) == 2 ? "00" . $usr_id['usr_id'] : $usr_id['usr_id'];
         $usr_id['usr_id'] =  strlen($usr_id['usr_id']) == 3 ? "0" . $usr_id['usr_id'] : $usr_id['usr_id'];
-        return SUB_FIJO . $usr_id['usr_id'];
+        return $sub_fijo . $usr_id['usr_id'];
     }
 }

@@ -1,5 +1,4 @@
-<?php
-@session_start();
+<?php @session_start();
 // XXX FECHA  XXX
 date_default_timezone_set('America/Mexico_city');
 $fecha = date('Y-m-d h:i:s');
@@ -172,4 +171,14 @@ function getTypeImg($filename)
             return "Image is a bmp";
             break;
     }
+}
+
+function verifica_rango($date_inicio, $date_fin, $date_nueva)
+{
+    $date_inicio = strtotime($date_inicio);
+    $date_fin = strtotime($date_fin);
+    $date_nueva = strtotime($date_nueva);
+    if (($date_nueva >= $date_inicio) && ($date_nueva <= $date_fin))
+        return true;
+    return false;
 }

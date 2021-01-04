@@ -17,19 +17,19 @@ class CuponesControlador
         if (isset($_POST['btnCrearCupon'])) {
 
             // Validar Email
-            if ($_POST['cps_aply'] == "by_email") {
-                
-                $listaEmail = explode(",", $_POST['cps_aply_email']);
-                foreach ($listaEmail as $key => $itemEmail) {
-                    if (!is_valid_email($itemEmail)) {
-                        return array(
-                            'status' => false,
-                            'mensaje' => 'Algún correo de la lista no es valido, verifique los datos'
-                        );
-                        break;
-                    }
-                }
-            }
+            // if ($_POST['cps_aply'] == "by_matricula") {
+
+            //     $listaEmail = explode(",", $_POST['cps_aply_matricula']);
+            //     foreach ($listaEmail as $key => $itemEmail) {
+            //         if (!is_valid_email($itemEmail)) {
+            //             return array(
+            //                 'status' => false,
+            //                 'mensaje' => 'Algún correo de la lista no es valido, verifique los datos'
+            //             );
+            //             break;
+            //         }
+            //     }
+            // }
 
             if ($_POST['cps_tope'] == '') {
                 $_POST['cps_tope'] = "-";
@@ -44,7 +44,7 @@ class CuponesControlador
             $cps_restricciones = array(
                 'aply' => array(
                     'tipo' => $_POST['cps_aply'],
-                    'data' => $_POST['cps_aply_email']
+                    'data' => $_POST['cps_aply_matricula']
                 ),
                 'cupon' => array(
                     'cps_r_inscripcion' => $_POST['cps_r_inscripcion'],
@@ -67,7 +67,7 @@ class CuponesControlador
                 return array(
                     'status' => true,
                     'mensaje' => 'Cupón creado con éxito listo para su uso',
-                    'pagina' => HTTP_HOST.'cupones'
+                    'pagina' => HTTP_HOST . 'cupones'
                 );
             } else {
                 return array(

@@ -58,16 +58,24 @@ class CuponesModelo
             $con = null;
         }
     }
-    public static function mdlMostrarCupones()
+    public static function mdlMostrarCupones($cps_codigo = "")
     {
         try {
             //code...
-            $sql = "SELECT * FROM tbl_cupones_cps WHERE cps_estado = 1";
-            $con = Conexion::conectar();
-            $pps = $con->prepare($sql);
-
-            $pps->execute();
-            return $pps->fetchAll();
+            if ($cps_codigo != "") {
+                $sql = "SELECT * FROM tbl_cupones_cps WHERE cps_codigo = ?";
+                $con = Conexion::conectar();
+                $pps = $con->prepare($sql);
+                $pps->bindValue(1, $cps_codigo);
+                $pps->execute();
+                return $pps->fetch();
+            } else {
+                $sql = "SELECT * FROM tbl_cupones_cps WHERE cps_estado = 1";
+                $con = Conexion::conectar();
+                $pps = $con->prepare($sql);
+                $pps->execute();
+                return $pps->fetchAll();
+            }
         } catch (PDOException $th) {
             //throw $th;
         } finally {
@@ -87,6 +95,28 @@ class CuponesModelo
             return $pps->rowCount() > 0;
         } catch (PDOException $th) {
             //throw $th;
+        } finally {
+            $pps = null;
+            $con = null;
+        }
+    }
+
+    public static function mdlAcualizarContadorCupon($cps_codigo)
+    {
+        try {
+            //code...
+            $sql = "UPDATE tbl_cupones_cps SET cps_tope = cps_tope -1 WHERE cps_codigo = ?;
+            UPDATE tbl_cupones_cps SET cps_uso = cps_uso +1 WHERE cps_codigo = ?;
+            ";
+            $con = Conexion::conectar();
+            $pps = $con->prepare($sql);
+            $pps->bindValue(1, $cps_codigo);
+            $pps->bindValue(2, $cps_codigo);
+            $pps->execute();
+            return $pps->rowCount() > 0;
+        } catch (PDOException $th) {
+            //throw $th;
+            return false;
         } finally {
             $pps = null;
             $con = null;

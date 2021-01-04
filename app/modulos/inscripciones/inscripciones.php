@@ -126,6 +126,21 @@ if (isset($rutas[1]) && $rutas[1] == "new") :
             </div>
         </form>
     </div>
+
+<?php elseif (isset($rutas[1]) && $rutas[1] == "fichas" && $rutas[2] != "") :
+    cargarComponente('breadcrumb', '', 'Ficha de inscripción');
+
+  
+?>
+    
+    <div class="container">
+
+        <iframe src="<?php echo HTTP_HOST ?>/app/report/ficha_inscripcion.php?fpg_id=<?php echo $rutas[2] ?>" width="100%" height="1200px" frameborder="0">
+
+
+        </iframe>
+
+    </div>
 <?php else :
     cargarComponente('breadcrumb', '', 'Listar inscripciones');
 ?>
@@ -155,15 +170,17 @@ if (isset($rutas[1]) && $rutas[1] == "new") :
                             <tr>
                                 <td><?php echo $fpg['fpg_id'] ?></td>
                                 <td><?php echo $fpg['usr_matricula'] ?></td>
-                                <td><?php echo $fpg['usr_nombre'] ?></td>
+                                <td><?php echo $fpg['usr_nombre'].' '. $fpg['usr_app'] .' '. $fpg['usr_apm']  ?></td>
                                 <td><?php echo $fpg['pqt_nombre'] ?></td>
                                 <td><?php echo $fpg['fpg_usuario_registro'] ?></td>
                                 <td><?php echo $fpg['fpg_fecha_registro'] ?></td>
                                 <td><?php echo $fpg['fpg_cupon'] ?></td>
                                 <td>
-                                    <a href="<?php echo HTTP_HOST . 'pagos/new/' . $fpg['usr_matricula'] . '/' . $fpg['fpg_id'] ?>" class="btn btn-warning">ABONAR</a>
+                                    <div class="btn-group">
+                                        <a href="<?php echo HTTP_HOST . 'pagos/new/' . $fpg['usr_matricula'] . '/' . $fpg['fpg_id'] ?>" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Abonar" ><i class="fa fa-money" aria-hidden="true"></i></a>
+                                        <a class="btn btn-info" href="<?php echo HTTP_HOST . 'inscripciones/fichas/' . $fpg['fpg_id'] ?> " data-toggle="tooltip" data-placement="top" title="Ver ficha de inscripcón" "><i class="fa fa-file-pdf-o"  ></i></a>
+                                    </div>
                                 </td>
-
                             </tr>
                         <?php endforeach; ?>
 
@@ -307,10 +324,10 @@ if (isset($rutas[1]) && $rutas[1] == "new") :
                                 </div>
                             </div>
                         </div>
-                       
+
                     </form>
                 </div>
-                
+
             </div>
 
         </div>

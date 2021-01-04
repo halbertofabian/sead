@@ -49,6 +49,33 @@ class UsuariosModelo
         }
     }
 
+    public static function mdlAgregarUsuarios2($usr)
+    {
+        try {
+            //code...
+            $sql = "INSERT INTO tbl_usuarios_usr (usr_matricula,usr_nombre,usr_telefono,usr_correo,usr_clave,usr_rol,usr_usuario_registro,usr_fecha_registro,usr_firma,usr_id_sucursal) VALUES(?,?,?,?,?,?,?,?,?,?)";
+            $con = Conexion::conectar();
+            $pps = $con->prepare($sql);
+            $pps->bindValue(1, $usr['usr_matricula']);
+            $pps->bindValue(2, $usr['usr_nombre']);
+            $pps->bindValue(3, $usr['usr_telefono']);
+            $pps->bindValue(4, $usr['usr_correo']);
+            $pps->bindValue(5, $usr['usr_clave']);
+            $pps->bindValue(6, $usr['usr_rol']);
+            $pps->bindValue(7, $usr['usr_usuario_registro']);
+            $pps->bindValue(8, $usr['usr_fecha_registro']);
+            $pps->bindValue(9, $usr['usr_firma']);
+            $pps->bindValue(10, SUCURSAL_ID);
+            $pps->execute();
+            return $pps->rowCount() > 0;
+        } catch (PDOException $th) {
+            //throw $th;
+        } finally {
+            $pps = null;
+            $con = null;
+        }
+    }
+
     public static function mdlAgregarUsuariosImport($usr)
     {
         try {
@@ -102,7 +129,30 @@ class UsuariosModelo
             $pps->bindValue(14, $usr['usr_id']);
 
             $pps->execute();
-            return $pps->rowCount()>0;
+            return $pps->rowCount() > 0;
+        } catch (PDOException $th) {
+            //throw $th;
+        } finally {
+            $pps = null;
+            $con = null;
+        }
+    }
+    public static function mdlActualizarUsuarios2($usr)
+    {
+        try {
+            $sql = "UPDATE  tbl_usuarios_usr SET usr_nombre =?,usr_telefono = ?,usr_correo = ?,usr_clave = ?, usr_rol = ?, usr_firma = ? WHERE usr_id = ?";
+            $con = Conexion::conectar();
+            $pps = $con->prepare($sql);
+            $pps->bindValue(1, $usr['usr_nombre']);
+            $pps->bindValue(2, $usr['usr_telefono']);
+            $pps->bindValue(3, $usr['usr_correo']);
+            $pps->bindValue(4, $usr['usr_clave']);
+            $pps->bindValue(5, $usr['usr_rol']);
+            $pps->bindValue(6, $usr['usr_firma']);
+            $pps->bindValue(7, $usr['usr_id']);
+
+            $pps->execute();
+            return $pps->rowCount() > 0;
         } catch (PDOException $th) {
             //throw $th;
         } finally {
@@ -187,6 +237,25 @@ class UsuariosModelo
             $sql = "SELECT * FROM tbl_usuarios_usr ORDER BY usr_id DESC ";
             $con = Conexion::conectar();
             $pps = $con->prepare($sql);
+            $pps->execute();
+            return $pps->fetch();
+        } catch (PDOException $th) {
+            //throw $th;
+            return false;
+        } finally {
+            $pps = null;
+            $con = null;
+        }
+    }
+
+    public static function mdlConsultarUsuarioByNombre($usr_nombre)
+    {
+        try {
+            //code...
+            $sql = "SELECT * FROM tbl_usuarios_usr WHERE usr_nombre = ?";
+            $con = Conexion::conectar();
+            $pps = $con->prepare($sql);
+            $pps->bindValue(1, $usr_nombre);
             $pps->execute();
             return $pps->fetch();
         } catch (PDOException $th) {
